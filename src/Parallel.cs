@@ -29,23 +29,19 @@ namespace SpikeLanguageExt
 
         public async Task<Result> DoWork(string id)
         {
-            System.Console.Error.WriteLine("1");
             var result = (from x in serviceOne.DoWork(id)
                           from y in serviceTwo.DoWork(id)
                           select x + y);
-            System.Console.Error.WriteLine("2");
 
             return (await result)
                         .Match<Result>(value => Result.some(value),
-                                                  err => Result.none(err));
+                                       err => Result.none(err));
         }
 
         public async Task<Result> DoWorkAsync(string id)
         {
-
             var first = serviceOne.DoWork(id);
             var second = serviceTwo.DoWork(id);
-
             await Task.WhenAll(first, second);
 
             var result = (from x in first
@@ -54,7 +50,7 @@ namespace SpikeLanguageExt
 
             return (await result)
                         .Match<Result>(value => Result.some(value),
-                                                  err => Result.none(err));
+                                       err => Result.none(err));
         }
     }
 

@@ -5,7 +5,6 @@ using SpikeLanguageExt;
 namespace SpikeLanguageExtTests
 {
     [TestFixture]
-    [Ignore("")]
     public class ServiceOneTests
     {
         private ServiceOne serviceOne;
