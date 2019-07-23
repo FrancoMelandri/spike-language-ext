@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace SpikeLanguageExt
 {
