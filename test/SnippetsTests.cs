@@ -5,7 +5,7 @@ using System;
 using LanguageExt;
 using static LanguageExt.Prelude;
 
-namespace SnippetsTests
+namespace SpikeLanguageExtTests
 {
     [TestFixture]
     public class SnippetsTests

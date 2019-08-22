@@ -1,11 +1,8 @@
 using NUnit.Framework;
-using Moq;
-using FluentAssertions;
 using SpikeLanguageExt;
-using LanguageExt;
-using static LanguageExt.Prelude;
 
-namespace SpikeLanguageExtTest {
+namespace SpikeLanguageExtTests
+{
 
     [TestFixture]
     public class LoaderTest {

@@ -4,7 +4,7 @@ using NUnit.Framework;
 using static LanguageExt.Prelude;
 using SpikeLanguageExt;
 
-namespace SpikeLanguageExtTest
+namespace SpikeLanguageExtTests
 {
     [TestFixture]
     public class OptionTests
