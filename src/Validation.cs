@@ -162,16 +162,14 @@ namespace SpikeLanguageExt
 
         public string ValidateEx(string email, string password, string code)
         {
-            var result = from x in ValidateMail(email)
-                         from y in ValidatePassword(password)
-                         from z in ValidateCode(code)
-                         select x + y + z;
-            return result
-                    .Match(
-                        _ => string.Empty,
-                        _ => _.Reduce((acc, item) => acc + "|" + item)
-                    );
-
+            return (from x in ValidateMail(email)
+                    from y in ValidatePassword(password)
+                    from z in ValidateCode(code)
+                    select x + y + z)
+                .Match(
+                    _ => string.Empty,
+                    _ => _.Reduce((acc, item) => acc + "|" + item)
+                );
         }
     }
 }
