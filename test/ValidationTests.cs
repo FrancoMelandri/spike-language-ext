@@ -1,7 +1,4 @@
-using System;
-using Moq;
 using NUnit.Framework;
-using static SpikeLanguageExt.UsingExtension;
 using SpikeLanguageExt;
 
 namespace SpikeLanguageExtTests
@@ -95,6 +92,46 @@ namespace SpikeLanguageExtTests
         public void SetUp()
         {
             sut = new ValidationChain();
+        }
+
+        [Test]
+        public void WhenAllDataIsValid_ReturEmptyString()
+        {
+            var result = sut.Validate("aa@aa.com", "aaaa", "1234");
+            Assert.AreEqual("", result);
+        }
+
+        [Test]
+        public void WhenEmailIsNotValid_ReturErrorString()
+        {
+            var result = sut.Validate("aa.com", "aaaa", "1234");
+            Assert.AreEqual("invalid mail", result);
+        }
+
+        [Test]
+        public void WhenPasswordIsNotValid_ReturErrorString()
+        {
+            var result = sut.Validate("aa@aa.com", "aaa", "1234");
+            Assert.AreEqual("invalid password", result);
+        }
+
+        [Test]
+        public void WhenCodeIsNotValid_ReturErrorString()
+        {
+            var result = sut.Validate("aa@aa.com", "aaaa", "abcd");
+            Assert.AreEqual("invalid code", result);
+        }
+    }
+
+    [TestFixture]
+    public class ValidationFunctionalTests
+    {
+        private ValidationFunctional sut;
+
+        [SetUp]
+        public void SetUp()
+        {
+            sut = new ValidationFunctional();
         }
 
         [Test]

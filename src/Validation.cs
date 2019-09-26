@@ -1,4 +1,6 @@
 using System.Linq;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace SpikeLanguageExt
 {
@@ -122,6 +124,54 @@ namespace SpikeLanguageExt
                     new PasswordlValidation(
                         new CodelValidation()))
                 .Validate(email, password, code);
+        }
+    }
+
+    public class ValidationFunctional
+    {
+        private const string INVALID_MAIL = "invalid mail";
+        private const string INVALID_PASSWORD = "invalid password";
+        private const string INVALID_CODE = "invalid code";
+
+        Validation<string, Unit> ValidateMail(string email) =>
+             email.Contains("@") ?
+                Success<string, Unit>(Unit.Default) :
+                Fail<string, Unit>(INVALID_MAIL);
+
+        Validation<string, Unit> ValidatePassword(string password) =>
+             password.Length > 3 ?
+                Success<string, Unit>(Unit.Default) :
+                Fail<string, Unit>(INVALID_PASSWORD);
+
+        Validation<string, Unit> ValidateCode(string code) =>
+             code.All(char.IsDigit) ?
+                Success<string, Unit>(Unit.Default) :
+                Fail<string, Unit>(INVALID_CODE);
+
+        public string Validate(string email, string password, string code)
+        {
+            return
+                ValidateMail(email)
+                .Bind(_ => ValidatePassword(password))
+                .Bind(_ => ValidateCode(code))
+                    .Match(
+                        _ => string.Empty,
+                        _ => _.Reduce((acc, item) => item)
+                    );
+        }
+
+        public string ValidateEx(string email, string password, string code)
+        {
+            var result = from x in ValidateMail(email)
+                         from y in ValidatePassword(password)
+                         from z in ValidateCode(code)
+                         select x + y + z;
+            return result
+                    .Match(
+                        _ => string.Empty,
+                        _ => _.Reduce((acc, item) => acc + "|" + item)
+                    );
+
         }
     }
 }
