@@ -160,7 +160,7 @@ namespace SpikeLanguageExt
                     );
         }
 
-        public string ValidateEx(string email, string password, string code)
+        public string Validate1(string email, string password, string code)
         {
             return (from x in ValidateMail(email)
                     from y in ValidatePassword(password)
