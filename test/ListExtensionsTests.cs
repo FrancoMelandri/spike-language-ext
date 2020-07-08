@@ -57,5 +57,15 @@ namespace SpikeLanguageExtTest
 
             result.Should().Be(240);
         }
+
+        [Test]
+        public void FoldWhile_ShouldSum_ArrayItems_WhileSumLessThen10()
+        {
+            var arr = new[] { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+            var result = _sut.PartialSum(arr, 0, sum, s => s != 5);
+
+            result.Should().Be(10);
+        }
     }
 }
