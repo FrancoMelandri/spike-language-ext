@@ -125,6 +125,6 @@ namespace SecondSnippet
         private IEnumerable<ProductView> FilterEmptyProduct(IEnumerable<Option<ProductView>> productView)
             => productView
                     .Filter(op => op.IsSome)
-                    .Map(op => op.Some(p => p).None(() => default));
+                    .Map(op => op.IfNone(() => default));
     }
 }
