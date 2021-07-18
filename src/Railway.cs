@@ -25,14 +25,14 @@ namespace SecondSnippet
         Catalog Get();
     }
 
-    public interface ICatalogApiFunctional
-    {
-        Either<string, Catalog> Get();
-    }
-
     public interface IProductApi
     {
         Product Get(string id);
+    }
+
+    public interface ICatalogApiFunctional
+    {
+        Either<string, Catalog> Get();
     }
 
     public interface IProductApiFunctional
@@ -48,12 +48,10 @@ namespace SecondSnippet
     public class ProductConverter : IProductConverter
     {
         public ProductView Convert(Product product)
-        {
-            return new ProductView
+            => new ProductView
             {
                 Identifier = $"{product.Id} - {product.Name}"
-            };
-        }
+            };        
     }
 
     public class Railway
@@ -83,7 +81,7 @@ namespace SecondSnippet
             {
                 var product = productApi.Get(id);
                 if (product != null)
-                    products.Add (productConverter.Convert(product));
+                    products.Add(productConverter.Convert(product));
             }
             return products.ToArray();
         }
@@ -91,37 +89,42 @@ namespace SecondSnippet
 
     public class RailwayFunctional
     {
-        ICatalogApiFunctional catalogApi;
-        IProductApiFunctional productApi;
-        IProductConverter productConverter;
+        ICatalogApiFunctional _catalogApi;
+        IProductApiFunctional _productApi;
+        IProductConverter _productConverter;
 
         public RailwayFunctional(ICatalogApiFunctional catalogApi,
                                  IProductApiFunctional productApi,
                                  IProductConverter productConverter)
         {
-            this.catalogApi = catalogApi;
-            this.productApi = productApi;
-            this.productConverter = productConverter;
+            _catalogApi = catalogApi;
+            _productApi = productApi;
+            _productConverter = productConverter;
         }
 
         public ProductView[] GetProducts()
-        {
-            return 
-                catalogApi
+            => _catalogApi
                 .Get()
-                .Match(
-                     _ => _
-                            .ProductList
-                            .Map(p => productApi
-                                         .Get(p)
-                                         .Match(
-                                            r => productConverter.Convert(r),
-                                            r => new ProductView()
-                                          ))
-                            .Filter(p => !string.IsNullOrEmpty(p.Identifier))
-                            .ToArray(),
-                    _ => new ProductView[] { }
-                );
-        }
+                .Map(catalog => GetProductDetails(catalog))
+                .Match(pv => FilterEmptyProduct(pv),
+                       err => Enumerable.Empty<ProductView>())
+                .ToArray();
+
+        private IEnumerable<Option<ProductView>> GetProductDetails(Catalog catalog)
+            => catalog
+                    .ProductList
+                    .Map(product => GetProductAndConvert(product));        
+
+        private Option<ProductView> GetProductAndConvert(string product)
+            => _productApi
+                    .Get(product)
+                    .Map(p => _productConverter.Convert(p))
+                    .Match(p => Option<ProductView>.Some(p),
+                           e => Option<ProductView>.None);
+
+        private IEnumerable<ProductView> FilterEmptyProduct(IEnumerable<Option<ProductView>> productView)
+            => productView
+                    .Filter(op => op.IsSome)
+                    .Map(op => op.Some(p => p).None(() => default));
     }
 }
