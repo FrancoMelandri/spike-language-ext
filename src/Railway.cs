@@ -105,26 +105,29 @@ namespace SecondSnippet
         public ProductView[] GetProducts()
             => _catalogApi
                 .Get()
-                .Map(catalog => GetProductDetails(catalog))
-                .Match(pv => FilterEmptyProduct(pv),
-                       err => Enumerable.Empty<ProductView>())
+                .Map(GetProductDetails)
+                .Match(FilterEmptyProduct,
+                       EmptyProduct)
                 .ToArray();
+
 
         private IEnumerable<Option<ProductView>> GetProductDetails(Catalog catalog)
             => catalog
                     .ProductList
-                    .Map(product => GetProductAndConvert(product));        
+                    .Map(GetProductAndConvert);        
 
         private Option<ProductView> GetProductAndConvert(string product)
             => _productApi
                     .Get(product)
-                    .Map(p => _productConverter.Convert(p))
-                    .Match(p => Option<ProductView>.Some(p),
-                           e => Option<ProductView>.None);
+                    .Map(_productConverter.Convert)
+                    .ToOption();
 
         private IEnumerable<ProductView> FilterEmptyProduct(IEnumerable<Option<ProductView>> productView)
             => productView
                     .Filter(op => op.IsSome)
                     .Map(op => op.IfNone(() => default));
+
+        private IEnumerable<ProductView> EmptyProduct(string err)
+            => Enumerable.Empty<ProductView>();
     }
 }
