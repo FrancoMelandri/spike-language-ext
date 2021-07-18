@@ -54,7 +54,7 @@ namespace SpikeLanguageExtTests
         }
 
         [Test]
-        public void ShouldReturnProducts()
+        public void GetProducts_WhenProduct_ReturnConverted()
         {
             var catalog = new Catalog 
             {

@@ -40,19 +40,13 @@ namespace SpikeLanguageExt
         private const string INVALID_CODE = "invalid code";
 
         private bool IsEmmailValid(string email)
-        {
-            return email.Contains("@");
-        }
+            => email.Contains("@");
 
         private bool IsPasswordValid(string password)
-        {
-            return password.Length > 3;
-        }
+            => password.Length > 3;
 
         private bool IsCodeValid(string code)
-        {
-            return code.All(char.IsDigit);
-        }
+            => code.All(char.IsDigit);
 
         public string Validate(string email, string password, string code)
         {
@@ -66,24 +60,38 @@ namespace SpikeLanguageExt
         }
     }
 
-    public class ValidationChain
+    public partial class ValidationChain
     {
         private const string INVALID_MAIL = "invalid mail";
         private const string INVALID_PASSWORD = "invalid password";
         private const string INVALID_CODE = "invalid code";
 
+        public string Validate(string email, string password, string code)
+            => new EmailValidation(
+                    new PasswordlValidation(
+                        new CodelValidation()))
+                .Validate(email, password, code);
+    }
+
+    public partial class ValidationChain
+    {
         interface IValidation
         {
             string Validate(string email, string password, string code);
         }
+    }
 
+    public partial class ValidationChain
+    {
         class EmailValidation : IValidation
         {
             IValidation _next;
-            public EmailValidation (IValidation next)
+
+            public EmailValidation(IValidation next)
             {
-                _next =  next;
+                _next = next;
             }
+
             public string Validate(string email, string password, string code)
             {
                 if (email.Contains("@"))
@@ -91,13 +99,16 @@ namespace SpikeLanguageExt
                 return INVALID_MAIL;
             }
         }
-
+    }
+    public partial class ValidationChain
+    {
         class PasswordlValidation : IValidation
         {
             IValidation _next;
-            public PasswordlValidation (IValidation next)
+
+            public PasswordlValidation(IValidation next)
             {
-                _next =  next;
+                _next = next;
             }
             public string Validate(string email, string password, string code)
             {
@@ -106,7 +117,9 @@ namespace SpikeLanguageExt
                 return INVALID_PASSWORD;
             }
         }
-
+    }
+    public partial class ValidationChain
+    {
         class CodelValidation : IValidation
         {
             public string Validate(string email, string password, string code)
@@ -116,15 +129,6 @@ namespace SpikeLanguageExt
                 return INVALID_CODE;
             }
         }
-
-        public string Validate(string email, string password, string code)
-        {
-            return
-                new EmailValidation(
-                    new PasswordlValidation(
-                        new CodelValidation()))
-                .Validate(email, password, code);
-        }
     }
 
     public class ValidationFunctional
@@ -133,43 +137,32 @@ namespace SpikeLanguageExt
         private const string INVALID_PASSWORD = "invalid password";
         private const string INVALID_CODE = "invalid code";
 
-        Validation<string, Unit> ValidateMail(string email) =>
-             email.Contains("@") ?
-                Success<string, Unit>(Unit.Default) :
-                Fail<string, Unit>(INVALID_MAIL);
+        Either<string, Unit> ValidateMail(string email) 
+            => email.Contains("@") ?
+                Right<string, Unit>(Unit.Default) :
+                INVALID_MAIL;
 
-        Validation<string, Unit> ValidatePassword(string password) =>
-             password.Length > 3 ?
-                Success<string, Unit>(Unit.Default) :
-                Fail<string, Unit>(INVALID_PASSWORD);
+        Either<string, Unit> ValidatePassword(string password) 
+            => password.Length > 3 ?
+                Right<string, Unit>(Unit.Default) :
+                INVALID_PASSWORD;
 
-        Validation<string, Unit> ValidateCode(string code) =>
-             code.All(char.IsDigit) ?
-                Success<string, Unit>(Unit.Default) :
-                Fail<string, Unit>(INVALID_CODE);
+        Either<string, Unit> ValidateCode(string code) 
+            => code.All(char.IsDigit) ?
+                Right<string, Unit>(Unit.Default) :
+                INVALID_CODE;
 
         public string Validate(string email, string password, string code)
-        {
-            return
-                ValidateMail(email)
+            => ValidateMail(email)
                 .Bind(_ => ValidatePassword(password))
                 .Bind(_ => ValidateCode(code))
-                    .Match(
-                        _ => string.Empty,
-                        _ => _.Reduce((acc, item) => item)
-                    );
-        }
+                .IfRight(_ => string.Empty);
 
         public string Validate1(string email, string password, string code)
-        {
-            return (from x in ValidateMail(email)
+            => (from x in ValidateMail(email)
                     from y in ValidatePassword(password)
                     from z in ValidateCode(code)
                     select x + y + z)
-                .Match(
-                    _ => string.Empty,
-                    _ => _.Reduce((acc, item) => acc + "|" + item)
-                );
-        }
+                .IfRight(_ => string.Empty);
     }
 }
