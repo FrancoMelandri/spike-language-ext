@@ -23,7 +23,7 @@ namespace SpikeLanguageExtTests
         }
 
         [Test]
-        public void ShouldReturnEmptyIfNoCatalog()
+        public void GetProducts_WhenNoCatalog_EmptyArray()
         {
             catalogApi
                 .Setup(m => m.Get())
@@ -31,11 +31,11 @@ namespace SpikeLanguageExtTests
             
             var result =  sut.GetProducts();
 
-            Assert.AreEqual (0, result.Length());
+            Assert.IsEmpty(result);
         }
 
         [Test]
-        public void ShouldReturnEmptyIfNoProduct()
+        public void GetProducts_WhenNoProduct_EmptyArray()
         {
             var catalog = new Catalog 
             {
@@ -50,7 +50,7 @@ namespace SpikeLanguageExtTests
             
             var result =  sut.GetProducts();
 
-            Assert.AreEqual (0, result.Length());
+            Assert.IsEmpty(result);
         }
 
         [Test]
@@ -65,14 +65,16 @@ namespace SpikeLanguageExtTests
                 .Returns(catalog);
             productApi
                 .Setup(m => m.Get("1"))
-                .Returns(new Product{ Id = "1", Name = "Name" });
+                .Returns(new Product{ Id = "1", Name = "Name1" });
             productApi
                 .Setup(m => m.Get("2"))
-                .Returns(new Product{ Id = "3", Name = "Name" });
+                .Returns(new Product{ Id = "2", Name = "Name2" });
             
             var result =  sut.GetProducts();
 
-            Assert.AreEqual (2, result.Length());
+            Assert.AreEqual(2, result.Length());
+            Assert.AreEqual("1 - Name1", result[0].Identifier);
+            Assert.AreEqual("2 - Name2", result[1].Identifier);
         }
     }
 

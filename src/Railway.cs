@@ -30,6 +30,11 @@ namespace SecondSnippet
         Product Get(string id);
     }
 
+    public interface IProductConverter
+    {
+        ProductView Convert(Product product);
+    }
+
     public interface ICatalogApiFunctional
     {
         Either<string, Catalog> Get();
@@ -38,11 +43,6 @@ namespace SecondSnippet
     public interface IProductApiFunctional
     {
         Either<string, Product> Get(string id);
-    }
-
-    public interface IProductConverter
-    {
-        ProductView Convert(Product product);
     }
 
     public class ProductConverter : IProductConverter
@@ -56,32 +56,32 @@ namespace SecondSnippet
 
     public class Railway
     {
-        ICatalogApi catalogApi;
-        IProductApi productApi;
-        IProductConverter productConverter;
+        ICatalogApi _catalogApi;
+        IProductApi _productApi;
+        IProductConverter _productConverter;
 
         public Railway(ICatalogApi catalogApi,
                        IProductApi productApi,
                        IProductConverter productConverter)
         {
-            this.catalogApi = catalogApi;
-            this.productApi = productApi;
-            this.productConverter = productConverter;
+            _catalogApi = catalogApi;
+            _productApi = productApi;
+            _productConverter = productConverter;
         }
 
         public ProductView[] GetProducts()
         {
             List<ProductView> products = new List<ProductView>();
 
-            var catalog = catalogApi.Get();
+            var catalog = _catalogApi.Get();
             if (catalog == null)
                 return products.ToArray();
 
             foreach (string id in catalog.ProductList)
             {
-                var product = productApi.Get(id);
+                var product = _productApi.Get(id);
                 if (product != null)
-                    products.Add(productConverter.Convert(product));
+                    products.Add(_productConverter.Convert(product));
             }
             return products.ToArray();
         }
