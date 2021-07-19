@@ -16,23 +16,26 @@ namespace Snippets
         }
 
         public Either<string, Catalog> Get()
-            => Try(() => _cache
-                            .Get()
-                            .Match(
-                                _ => _,
-                                () => _catalog
-                                        .Get()
-                                        .Match(
-                                            _ => 
-                                            {
-                                                _cache.Set(_);
-                                                return _;
-                                            },
-                                            _ => (Either<string, Catalog>)_                                                                             
-                                        )))
+            => Try(() => GetFromCacheOrApi())
                 .Match(
                     catalog => catalog,
-                    ex => ex.Message
-                );
+                    ex => ex.Message);
+
+        private Either<string, Catalog> GetFromCacheOrApi()
+            => _cache.Get()
+                    .Match(
+                        _ => _,
+                        () => GetFromApi());
+
+        private Either<string, Catalog> GetFromApi()
+            => _catalog
+                    .Get()
+                    .Map(SaveCatalogInCache);
+
+        private Catalog SaveCatalogInCache(Catalog catalog)
+        {
+            _cache.Set(catalog);
+            return catalog;
+        }
     }
 }

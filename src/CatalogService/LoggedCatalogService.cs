@@ -17,7 +17,7 @@ namespace Snippets
         public Either<string, Catalog> Get()
         {
             var result = _catalog.Get();
-            result.IfLeft(_ => _logger.Log(_));
+            result.IfLeft(err => _logger.Log(err));
             return result;
         }
     }

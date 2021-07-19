@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using Snippets;
 using LanguageExt;
-using static LanguageExt.Prelude;
 using System;
 
 namespace SpikeLanguageExtTests

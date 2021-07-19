@@ -41,7 +41,7 @@ namespace SpikeLanguageExtTests
         }
 
         [Test]
-        public void ShouldReturnCatalogWithoutLog()
+        public void Get_WhenCatalog_NoLog()
         { 
             catalogService
                 .Setup(m => m.Get())
