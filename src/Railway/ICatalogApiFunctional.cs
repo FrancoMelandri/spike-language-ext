@@ -1,8 +1,8 @@
 ﻿using LanguageExt;
 
-namespace CatalogService
+namespace Railway
 {
-    public interface ICatalogService
+    public interface ICatalogApiFunctional
     {
         Either<string, Catalog> Get();
     }

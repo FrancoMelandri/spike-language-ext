@@ -1,4 +1,4 @@
-﻿namespace Snippets
+﻿namespace CatalogService
 {
     public interface ICache
     {

@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using SpikeLanguageExt;
 
-namespace SpikeLanguageExtTests
+namespace RailwayTests
 {
     [TestFixture]
     public class ServiceTwoTests

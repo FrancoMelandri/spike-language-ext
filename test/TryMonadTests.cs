@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using SpikeLanguageExt;
 
-namespace SpikeLanguageExtTests
+namespace RailwayTests
 {
     [TestFixture]
     public class TryMonadTests

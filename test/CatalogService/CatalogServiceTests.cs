@@ -1,14 +1,14 @@
 ﻿using Moq;
 using NUnit.Framework;
-using Snippets;
+using CatalogService;
 using System;
 
-namespace SpikeLanguageExtTests
+namespace CatalogServiceTests
 {
     [TestFixture]
     public class CatalogServiceTests
     {
-        private CatalogService sut;
+        private CatalogService.CatalogService sut;
         private Mock<IApiClient> apiClient;
         private Catalog catalog;
 
@@ -17,7 +17,7 @@ namespace SpikeLanguageExtTests
         {
             apiClient = new Mock<IApiClient>();
 
-            sut = new CatalogService(apiClient.Object);                            
+            sut = new CatalogService.CatalogService(apiClient.Object);                            
         
             catalog = new Catalog
             {

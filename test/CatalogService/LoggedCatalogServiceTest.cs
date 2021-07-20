@@ -1,9 +1,8 @@
 ﻿using Moq;
 using NUnit.Framework;
-using Snippets;
-using LanguageExt;
+using CatalogService;
 
-namespace SpikeLanguageExtTests
+namespace CatalogServiceTests
 {
     [TestFixture]
     public class LoggedCatalogServiceTest
@@ -55,13 +54,11 @@ namespace SpikeLanguageExtTests
         }
 
         [Test]
-        public void ShouldLogError()
+        public void Get_WhenError_Log()
         { 
-            Either<string, Catalog> error = "error";
-
             catalogService
                 .Setup(m => m.Get())
-                .Returns(error);
+                .Returns("error");
 
             var result = sut.Get();
 

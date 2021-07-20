@@ -1,6 +1,6 @@
 using System;
 
-namespace Snippets
+namespace CatalogService
 {
     public class CatalogServiceImperative
     {

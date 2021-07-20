@@ -1,10 +1,10 @@
 ﻿using Moq;
 using NUnit.Framework;
-using Snippets;
+using CatalogService;
 using LanguageExt;
 using System;
 
-namespace SpikeLanguageExtTests
+namespace CatalogServiceTests
 {
     [TestFixture]
     public class CachedCatalogServiceTest

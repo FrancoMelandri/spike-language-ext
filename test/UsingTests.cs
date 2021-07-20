@@ -3,7 +3,7 @@ using Moq;
 using NUnit.Framework;
 using static SpikeLanguageExt.UsingExtension;
 
-namespace SpikeLanguageExtTests
+namespace RailwayTests
 {
     public interface ILog
     {

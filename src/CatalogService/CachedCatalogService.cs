@@ -1,7 +1,7 @@
 ﻿using LanguageExt;
 using static LanguageExt.Prelude;
 
-namespace Snippets
+namespace CatalogService
 {
     public class CachedCatalogService : ICatalogService
     {

@@ -1,6 +1,6 @@
 ﻿using LanguageExt;
 
-namespace Snippets
+namespace CatalogService
 {
     public interface ICatalogCache
     {

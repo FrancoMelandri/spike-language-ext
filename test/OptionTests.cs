@@ -4,7 +4,7 @@ using NUnit.Framework;
 using static LanguageExt.Prelude;
 using SpikeLanguageExt;
 
-namespace SpikeLanguageExtTests
+namespace RailwayTests
 {
     [TestFixture]
     public class OptionTests
