@@ -20,7 +20,7 @@ namespace RailwayTests
             sut
                 .DoTry("10")
                 .Match(_ => Assert.AreEqual(10, _),
-                       __ => Assert.IsTrue(false) );
+                       _ => Assert.IsTrue(false) );
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace RailwayTests
             sut
                 .DoTry("AA")
                 .Match(_ => Assert.IsTrue(false),
-                       __ => Assert.IsTrue(true) );
+                       _ => Assert.IsTrue(true) );
         }   
     }
 

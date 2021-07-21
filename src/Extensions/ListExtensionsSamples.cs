@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpikeLanguageExt
+namespace Extensions
 {
     public class ListExtensionsSamples
     {

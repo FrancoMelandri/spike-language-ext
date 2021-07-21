@@ -34,8 +34,8 @@ namespace SpikeLanguageExt
                           select x + y);
 
             return (await result)
-                        .Match<Result>(value => Result.some(value),
-                                       err => Result.none(err));
+                        .Match(value => Result.some(value),
+                               err => Result.none(err));
         }
 
         public async Task<Result> DoWorkAsync(string id)
@@ -49,8 +49,8 @@ namespace SpikeLanguageExt
                           select x + y);
 
             return (await result)
-                        .Match<Result>(value => Result.some(value),
-                                       err => Result.none(err));
+                        .Match(value => Result.some(value),
+                               err => Result.none(err));
         }
     }
 

@@ -1,7 +1,7 @@
 using System;
 using Moq;
 using NUnit.Framework;
-using static SpikeLanguageExt.UsingExtension;
+using static Extensions.UsingExtension;
 
 namespace RailwayTests
 {
@@ -12,15 +12,16 @@ namespace RailwayTests
 
     public class CanBeDispose : IDisposable
     {
-        private readonly ILog logger;
+        private readonly ILog _logger;
 
         public CanBeDispose(ILog logger)
         {
-            this.logger = logger;
+            _logger = logger;
         }
+
         public void Dispose()
         {
-            this.logger.Log("dispose");
+            _logger.Log("dispose");
         }
     }
 

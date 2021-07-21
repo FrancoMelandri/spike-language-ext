@@ -1,16 +1,16 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using SpikeLanguageExt;
 using System;
+using Extensions;
 
-namespace SpikeLanguageExtTest
+namespace ExtensionsTest
 {
     public class ListExtensionsTests
     {
         private ListExtensionsSamples _sut;
 
-        Func<int, int, int> sum = (x, y) => x + y;
-        Func<int, int, int> mul = (x, y) => x * y;
+        readonly Func<int, int, int> sum = (x, y) => x + y;
+        readonly Func<int, int, int> mul = (x, y) => x * y;
 
         [SetUp]
         public void SetUp()

@@ -2,7 +2,7 @@ using FluentAssertions;
 using LanguageExt;
 using NUnit.Framework;
 using static LanguageExt.Prelude;
-using SpikeLanguageExt;
+using Extensions;
 
 namespace RailwayTests
 {
